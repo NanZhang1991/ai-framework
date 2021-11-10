@@ -1,0 +1,4 @@
+{
+    "DOWNLOAD_FILE_IP": "http://192.168.100.33:8087/fileSystem/getFileUrl",
+    "UPLOAD_FILE_IP": "http://192.168.100.33:8087/fileSystem/uploadFile"
+}

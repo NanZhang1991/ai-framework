@@ -1,0 +1,905 @@
+#coding=utf-8
+
+import os
+
+import time
+
+
+
+# 需要统计的文件夹或者文件
+
+basedir = 'app'
+
+filelists = []
+
+# 指定想要统计的文件类型
+
+whitelist = ['py']
+
+#遍历文件, 递归遍历文件夹中的所有
+
+def getFile(basedir):
+
+    global filelists
+
+    for parent,dirnames,filenames in os.walk(basedir):
+
+        for filename in filenames:
+
+            ext = filename.split('.')[-1]
+
+            #只统计指定的文件类型，略过一些log和cache文件
+
+            if ext in whitelist:
+
+                filelists.append(os.path.join(parent,filename))
+
+#统计一个文件的行数
+
+def countLine(fname):
+
+    count = 0
+
+    for file_line in open(fname, encoding='utf-8').readlines():
+
+        if file_line != '' and file_line != '\n': #过滤掉空行
+
+            count += 1
+
+    print (fname + '----' , count)
+
+    return count
+
+if __name__ == '__main__' :
+
+    startTime = time.clock()
+
+    getFile(basedir)
+
+    totalline = 0
+
+    for filelist in filelists:
+
+        totalline = totalline + countLine(filelist)
+
+    print ('total lines:', totalline)
+
+    print ('Done! Cost Time: %0.2f second' % (time.clock() - startTime))
+import requests
+
+
+
+res = requests.get('http://127.0.0.1:8008')
+
+print(res.content)
+from app.flask_app import app
+
+    
+
+if __name__ == '__main__':
+
+    app.run(host="0.0.0.0", port=8008,  threaded=True, debug=True)
+
+import os
+
+import unittest
+
+from app.main import  MainProgram
+
+from app.common.log import logger
+
+from app.config.config import log_dir
+
+
+
+logger = logger(os.path.join(log_dir, 'view.log'), __name__)
+
+class TestStringMethods(unittest.TestCase):
+
+    def test_string(self):
+
+        input_fp = {'a':2, "b":3}
+
+        app_result = MainProgram.function(input_fp)
+
+        my_dict = {'code':200, 'data':app_result.get('data'), 'msg':app_result.get('message')}
+
+        assert isinstance(my_dict, dict)
+
+        
+
+if __name__ == '__main__':
+
+    unittest.main()
+# -*- coding: utf-8 -*-
+
+
+
+import os
+
+from pathlib import Path
+
+
+
+# 获取当前的路径
+
+def getfilepath_write_word():
+
+    file = open('allcode.docx','a+',encoding='utf-8')
+
+    for parent,dirnames,filenames in os.walk(os.getcwd()):
+
+        for filename in filenames:
+
+            path = Path(os.path.join(parent, filename)).as_posix()
+
+            if path.endswith('.py'):
+
+                with open(path,'r',encoding='utf-8') as f:
+
+                    for line in f.readlines():
+
+                        print(line,file=file)
+
+    print('代码写入成功')
+
+
+
+
+
+if __name__ == '__main__':
+
+   getfilepath_write_word()
+
+from .algorithm.math_utils import calculate
+
+
+
+class MainProgram:
+
+    @staticmethod
+
+    def function(input_fp):
+
+        result_dict = {}
+
+        data = calculate(data=input_fp)
+
+        if data:
+
+            result_dict['data'] = data
+
+            result_dict['message'] ='Review check complete'
+
+        else:
+
+            result_dict['message'] = 'Nothing found'
+
+        return result_dict
+
+def calculate(**kwargs):
+
+    return kwargs.get('data')
+
+
+
+if __name__ =="__main__":
+
+    abc = {'a':2, 'b':3}
+
+    res = calculate(data=abc)
+
+    print(res)
+
+
+
+from celery.result import AsyncResult
+
+from celery import Celery
+
+from ..common.exception import CustomException
+
+from ..common.dataload import load_json,  ZipHanding
+
+from ..common.format_chick import FileCheck
+
+from ..main import  MainProgram
+
+import requests
+
+import json
+
+import time
+
+import os
+
+from datetime import datetime
+
+from pathlib import Path
+
+
+
+from ast import literal_eval
+
+
+
+app = Celery('task',  broker='redis://localhost:6379/0', backend='redis://localhost:6379/1') 
+
+# celery.conf.update(app.config)
+
+
+
+json_path = 'app/config/config.json'
+
+config = load_json(json_path)
+
+UPLOAD_FOLDER = config.get('UPLOAD_FOLDER')
+
+OUTPUT_FOLDER = config.get('OUTPUT_FOLDER')
+
+DOWNLOAD_FILE_IP = config.get('DOWNLOAD_FILE_IP') 
+
+UPLOAD_FILE_IP = config.get('UPLOAD_FILE_IP')
+
+
+
+@app.task
+
+def get_start(data):
+
+    task_id = data.get('taskId')
+
+    file_id = data.get('fileId')
+
+    details = data.get('data')
+
+
+
+    message = {}    
+
+    docx_chick = FileCheck(['zip'])
+
+ 
+
+    params = {'fileId': file_id}
+
+    file_url_text = requests.get(DOWNLOAD_FILE_IP, params=params).text
+
+    file_url_dict = json.loads(file_url_text)
+
+    print()
+
+    if file_url_dict.get('data'):
+
+        file_url = file_url_dict.get('data').get('fileUrl')
+
+        message['getFileMsg'] = file_url_dict.get('msg')
+
+        content = requests.get(file_url).content
+
+        if docx_chick.allowed_file(file_url) =='zip':
+
+            fn = file_id + '.zip'
+
+            input_fp = os.path.join(UPLOAD_FOLDER, fn)
+
+            input_fp = Path(input_fp).as_posix()
+
+            with open(input_fp, 'wb') as f:
+
+                f.write(content)
+
+            app_result = MainProgram.calculate(input_fp) # main function
+
+            my_dict = {'code':200, 'data':app_result.get('data'), 'msg':app_result.get('message')}
+
+        else:
+
+            my_dict = {'code':201, 'msg':'File format error'}
+
+            return my_dict
+
+
+
+    else:
+
+        my_dict = {'code':205, 'msg':'File not found'}
+
+        return my_dict
+
+
+
+
+
+def get_status(task_id):
+
+    task = AsyncResult(task_id, app=app)
+
+    # status = task.ready() 
+
+    status = task.state # PENDING FAILURE SUCCESS RETRY STARTED
+
+    my_dict = {}
+
+    result = task.result
+
+    if status == "SUCCESS":
+
+        my_dict = result
+
+        return my_dict
+
+    elif status == "FAILURE":
+
+        my_dict['code']= 204
+
+        my_dict["msg"] = 'Task is %s'%(status)
+
+    else:
+
+        my_dict['code']= 202
+
+        my_dict["msg"] = 'Task is %s'%(status)
+
+    return my_dict
+
+
+
+
+
+    
+
+import json
+
+import pandas as  pd
+
+from ast import literal_eval
+
+import os
+
+import shutil
+
+import zipfile
+
+
+
+def load_json(json_path):
+
+    with open(json_path, 'r', encoding='utf-8') as f:
+
+        dic = json.load(f)
+
+    return dic
+
+
+
+def load_task(fp):
+
+    task_df = pd.read_csv(fp, encoding='utf-8', dtype={'code':int})
+
+    task_df['data'] = task_df['data'].apply(literal_eval)
+
+    task_df['msg'] = task_df['msg'].apply(literal_eval)
+
+    return task_df 
+
+
+
+
+
+class ZipHanding:
+
+    """Decompress the ZIP file or compress the file into a ZIP file"""
+
+    def unzip(self, zip_path, dp=None):  
+
+        """
+
+        Unzip zip file to a folder
+
+        
+
+        Parameters
+
+        ---------
+
+        zip_path: Zip file path 
+
+        dp: Decompression path
+
+
+
+        Returns
+
+        ---------
+
+        dir_path: The path of the extracted folder
+
+
+
+        Raises
+
+        ---------
+
+        """
+
+        if dp == None:
+
+            ## By default, it is decompressed to the current directory
+
+            dp = zip_path.rsplit('.', 1)[0]
+
+        if os.path.exists(dp):
+
+            shutil.rmtree(dp)        
+
+        with zipfile.ZipFile(zip_path, 'r') as f:
+
+            for fn in f.namelist():
+
+                f.extract(fn, dp)
+
+        return dp
+
+
+
+    def __rm_file_folder(self, fp):
+
+        '''
+
+        remove file or folder
+
+        '''
+
+        if os.path.exists(fp) and os.path.isfile(fp):
+
+            os.remove(fp)
+
+        elif os.path.exists(fp) and os.path.isdir(fp):
+
+            shutil.rmtree(fp)
+
+        else:
+
+            raise FileNotFoundError('File not found')
+
+
+
+    def __rename_correctly(self, string):
+
+        '''
+
+        Rename the garbled characters extracted from the window package
+
+        '''
+
+        try:
+
+            new_string = string.encode('cp437').decode('utf-8')
+
+        except:
+
+            try:
+
+                new_string = string.encode('cp437').decode('gbk')
+
+            except:
+
+                new_string = string.encode('utf-8').decode('utf-8')
+
+        return  new_string
+
+        
+
+    def __rm_special_name_folder(self, dir_path, folder_name='__MACOSX'): 
+
+        '''
+
+        Delete the folder named 'xxxx' if it exists.
+
+        The default folder name is __MACOSX.
+
+        '''
+
+        for root, dirs, files in os.walk(dir_path, topdown=False):
+
+            for name in dirs:
+
+                if name == folder_name :
+
+                    shutil.rmtree(os.path.join(root, name))  
+
+
+
+    def __standard_zip_dir(self, dir_path):
+
+        for root, dirs, filenames in os.walk(dir_path):
+
+            for fn in filenames:
+
+                fp = os.path.join(root, fn)
+
+                new_fp = os.path.join(dir_path, self.__rename_correctly(fn))
+
+                os.rename(fp, new_fp)
+
+                
+
+        for root, dirs, filenames in os.walk(dir_path):
+
+            for folder in dirs:
+
+                dp = os.path.join(root, folder)
+
+                self.__rm_file_folder(dp)
+
+                self.__rm_special_name_folder(dir_path)   
+
+                 
+
+    @classmethod
+
+    def decompression(cls, zip_path):
+
+        dir_path = cls().unzip(zip_path)
+
+        cls().__standard_zip_dir(dir_path)      
+
+        return dir_path
+
+
+
+    @classmethod
+
+    def zip_file(cls, dfp, out_path=None):
+
+        """
+
+        Compresses the specified folder
+
+
+
+        Parameters
+
+        ---------
+
+        dfp: Destination folder or file path.
+
+        out_path: Save path of the compressed file +xxxx.zip.
+
+
+
+        Returns
+
+        ---------
+
+        """
+
+
+
+        if os.path.isdir(dfp):   
+
+            if out_path == None:
+
+                out_path = dfp + '.zip'
+
+            with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as f:
+
+                    for root, _, filenames in os.walk(dfp):
+
+                        for fn in filenames:
+
+                            f.write(filename=os.path.join(root, fn), arcname=fn)
+
+        else:
+
+            if out_path == None:
+
+                out_path = dfp.rsplit('.', 1)[0] + '.zip'
+
+            with zipfile.ZipFile(out_path, "w", zipfile.ZIP_DEFLATED) as f:
+
+                f.write(dfp, dfp.rsplit('/', 1)[1])
+
+        print(out_path)
+
+    
+
+if __name__=='__main__':
+
+    json_path = 'app/config/app_config.json'
+
+    print(load_json(json_path))
+
+    
+
+    zip_path = 'app/data/input/三元组数据集_云测早期标注.zip'
+
+    dir_path = ZipHanding.decompression(zip_path)
+
+    print(f'decompression {dir_path}')
+
+    res = dfp = 'app/data/input/三元组数据集_云测早期标注'
+
+    print(f'zip_file path is {res}')
+
+
+
+class CustomException(Exception):
+
+    def __init__(self, message):
+
+        self.message = message
+
+    
+
+    def __str__(self):
+
+        return str(self.message)
+class FileCheck:
+
+    """
+
+    Document Type Checking
+
+
+
+    Args:
+
+    fileType: A string or list of strings with a file type suffix.
+
+    """    
+
+    def __init__(self, fileType):
+
+        self.ALLOWED_EXTENSIONS = fileType
+
+        
+
+    def allowed_file(self, fn):
+
+        """
+
+        Args:
+
+            fileType(:obj:'list, str'):
+
+                A string or list of strings with a file type suffix.
+
+        Return:
+
+            :obj:'bool, str'
+
+            file type or False
+
+
+
+        Examples
+
+        ----------
+
+        Check if the file is DOCX
+
+        >>>docxChick = FileCheck(['docx'])
+
+        >>>docxChick.allowed_file('abcd.docx')
+
+        >>>'docx'
+
+        """
+
+        if '.' in fn and fn.rsplit('.', 1)[1] in self.ALLOWED_EXTENSIONS:
+
+            return fn.rsplit('.', 1)[1]
+
+        else:
+
+            return False
+
+
+
+if __name__=='__main__':
+
+
+
+    docx_chick = FileCheck(['docx'])
+
+    docx_chick.allowed_file('abcd.docx')
+import logging
+
+from logging import handlers 
+
+from concurrent_log_handler import ConcurrentRotatingFileHandler
+
+import os
+
+import sys
+
+
+
+def logger(filename, module_name):
+
+    logging.basicConfig()
+
+    logger = logging.getLogger(module_name)
+
+    logger.setLevel(logging.DEBUG)    
+
+    th = ConcurrentRotatingFileHandler(filename=filename, mode='a', maxBytes=10 * 1000000,
+
+                                                               backupCount=10, use_gzip=False,
+
+                                                               encoding='utf-8')
+
+    th.suffix = "%Y-%m-%d.log"
+
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+    th.setFormatter(formatter)
+
+    th.setLevel(logging.DEBUG)
+
+    logger.addHandler(th)
+
+    stream_handler = logging.StreamHandler()
+
+    stream_handler.setFormatter(formatter)
+
+    stream_handler.setLevel(logging.DEBUG)
+
+
+
+    logger.addHandler(stream_handler)
+
+    logger.removeHandler(stream_handler)
+
+    return logger
+
+
+
+
+
+if __name__ == "__main__":
+
+    log_dir = os.path.join(os.getcwd(), 'doc_review/data/log_output')
+
+    fn = 'log.log'
+
+    logger = logger(os.path.join(log_dir, fn), __name__)
+
+    
+
+    logger.debug('Quick zephyrs blow, vexing daft Jim.')
+
+    logger.info('How quickly daft jumping zebras vex.')
+
+    logger.error('unknow')
+
+    print(os.path.basename(sys.argv[0]))
+import os 
+
+from pathlib import Path
+
+
+
+'''
+
+Configure config through the .py file
+
+'''
+
+log_dir = os.path.join(os.getcwd(), 'app/data/log_output')
+
+log_dir = Path(log_dir).as_posix()
+
+
+import os
+
+from pathlib import Path
+
+from ast import literal_eval
+
+
+
+from flask import Blueprint, request, send_file, send_from_directory, make_response, jsonify, url_for, current_app
+
+from ..common.log import logger
+
+from ..common.exception import CustomException
+
+from ..config.config import log_dir
+
+from ..celery_app.task import get_start, get_status
+
+
+
+
+
+logger = logger(os.path.join(log_dir, 'view.log'), __name__)
+
+appName = Blueprint("/api", __name__, url_prefix='/api')
+
+
+
+@appName.route('/')
+
+def test():
+
+    return '200' 
+
+
+
+@appName.route('/task_start', methods=['POST'], strict_slashes=False)
+
+def task_start():
+
+    data = request.get_json(force=True)
+
+    logger.info(f"request data---------\n  data:{data}")
+
+    # Asynchronous tasks
+
+    task = get_start.apply_async([data]) # Pass the parameter as a list  
+
+    task_id = task.task_id
+
+    print('---------------', task_id)
+
+    return make_response(jsonify(code=200, data={"task_id":task_id}, msg='success'))
+
+
+
+
+
+@appName.route('/task_status', methods=['GET'])
+
+def task_status():
+
+    task_id = request.args.get('task_id')
+
+    my_dict = get_status(task_id)
+
+    if my_dict.get('data')==None:
+
+        my_dict['data'] = []
+
+    return make_response(jsonify(my_dict))
+
+
+
+    
+
+from flask import Flask
+
+from flask_cors import CORS
+
+from . import view
+
+
+
+app = Flask(__name__)
+
+
+
+app.config["JSON_AS_ASCII"]=False
+
+CORS(app, resources=r'/*')
+
+
+
+@app.route('/')
+
+def test():
+
+    return 'Port test successful!'
+
+
+
+app.debug = True
+
+with app.app_context():
+
+    # appName 根据自己实际的路由注册
+
+    app.register_blueprint(view.appName) #
+

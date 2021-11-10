@@ -1,0 +1,9 @@
+# Ignore everything in this directory
+.vscode/
+.idea/
+app/model_dirs/*
+app/data/input/*
+app/data/output/*
+
+# Except this file !.gitkeep
+!.gitkeep
