@@ -14,6 +14,9 @@ pip install redis
 ```
 
 ### Redis数据库安装
+官网安装方法 https://redis.io/download
+
+**windows**
 ```shell
 下载地址：https://github.com/tporadowski/redis/releases。
 ```
@@ -32,9 +35,9 @@ redis-server.exe redis.windows.conf
 ![Image text](https://www.runoob.com/wp-content/uploads/2014/11/redis-install1.png)
 
 这时候另启一个 cmd 窗口，原来的不要关闭，不然就无法访问服务端了。
-将新启动的cmd窗口，切换到自己项目的根目录（celery_task.py）文件的上一层目录，输入:
+将新启动的cmd窗口，切换到自己项目的根目录（task.py）文件的上一层目录，输入:
 ```shell
-celery -A <mymodule>.celery_task  worker --loglevel=info
+celery -A app.celery_app.task worker --loglevel=info
 ```
 
 根据设备不同，可能会出现类似错误
@@ -58,7 +61,20 @@ pip install eventlet
 ```shell
 celery -A <mymodule>.celery_task  worker --loglevel=info -P eventlet
 ```
-
+**Linux**
+```bash
+wget https://download.redis.io/redis-stable.tar.gz && \
+tar -xvzf redis-stable.tar.gz && \
+mv redis-stable/ redis && \
+rm -f redis-stable.tar.gz && \
+yum clean all && \
+cd redis && \
+make && make PREFIX=/usr/local/redis install && \
+mkdir -p /usr/local/redis/conf/ && \
+cp /home/redis/redis.conf  /usr/local/redis/conf/  && \
+sed -i '69s/127.0.0.1/0.0.0.0/' /usr/local/redis/conf/redis.conf && \
+sed -i '88s/protected-mode yes/protected-mode no/' /usr/local/redis/conf/redis.conf
+```
 当看到如下输出：
 
 ![Image text](https://img-blog.csdn.net/20170714134724989?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZnJlZWtpbmcxMDE=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center)
@@ -84,37 +100,18 @@ pip3 install redis
 安装好包以后，需要安装redis数据库
 输入一下命令：
 ```shell
-wget http://download.redis.io/releases/redis-5.0.7.tar.gz
+curl https://download.redis.io/redis-stable.tar.gz -o redis-stable.tar.gz
 ```
-
-若wget没有安装，则先提前安装wget
-```shell
-yum install wget
-```
-
-当输入下载redis数据库命令时，敲入回车键执行后如下图:
-
-![Image text](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181111300-1365895938.png)
-
-等待下载完成。
-
 #### 解压
 下载完成后需要将压缩文件解压，输入以下命令解压到当前目录
 
 ```shell
-tar -zvxf redis-5.0.7.tar.gz
+tar -zvxf redis-stable.tar.gz
 ```
-
-解压后在根目录上输入ls 列出所有目录会发现与下载redis之前多了一个redis-5.0.7.tar.gz文件和 redis-5.0.7的目录。
-
-![Image text](https://img2018.cnblogs.com/i-beta/349354/202002/349354-20200213181254662-102495021.png)
-
 移动redis目录
 
-一般都会将redis目录放置到 /usr/local/redis目录，所以这里输入下面命令将目前在/root目录下的redis-5.0.7文件夹更改目录，同时更改文件夹名称为redis。
-
 ```shell
-mv /home/redis-5.0.7 /usr/local/redis
+mv /home/redis-stable /usr/local/redis
 ```
 
 #### 编译
@@ -143,23 +140,38 @@ make PREFIX=/usr/local/redis install
 
 
 #### 启动redis
+复制配置文件到创建的配置文件目录
+```bash
+mkdir -p /usr/local/redis/conf/
+cp /home/redis/redis.conf  /usr/local/redis/conf/  
+```
+添加环境变量
+```bash
+vim /etc/profile
+```
+```vim
+PATH=$PATH:/usr/local/redis/bin
+PATH=$PATH:/usr/local/redis/conf
 
-根据上面的操作已经将redis安装完成了。在目录/usr/local/redis 输入下面命令启动redis
-
+```
+激活环境变量
+```bash
+source /etc/profile
+```
+启动redis服务
+```bash
+redis-server redis.conf
+```
 ```shell
 ./bin/redis-server& ./redis.conf
 ```
-
 在Linux系统上，redis数据库已经下载完成，并且启动，此时，跟windows系统上的流程一样：
-#### 启动worker
+#### 启动celery worker
 切换到项目目录下，输入
 ```shell
 celery -A <mymodule>.celery_task  worker --loglevel=info
 ```
 成功以后，就可以运行flask接口服务文件，异步接口就启动成功了！
-
-
-
 
 
 # celery使用方法

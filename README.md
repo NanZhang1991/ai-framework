@@ -10,7 +10,7 @@ git clone https://github.com/NanZhang1991/ai-framework.git
 from source code 
 Download, extract and compile Redis with:
 ```bash
-wget https://download.redis.io/redis-stable.tar.gz && \
+curl https://download.redis.io/redis-stable.tar.gz -o redis-stable.tar.gz && \
 tar -xvzf redis-stable.tar.gz && \
 mv redis-stable/ redis && \
 rm -f redis-stable.tar.gz && \
@@ -22,16 +22,22 @@ cp /home/redis/redis.conf  /usr/local/redis/conf/  && \
 sed -i '69s/127.0.0.1/0.0.0.0/' /usr/local/redis/conf/redis.conf && \
 sed -i '88s/protected-mode yes/protected-mode no/' /usr/local/redis/conf/redis.conf
 ```
-Adding environment variables
+添加环境变量
 ```bash
 vim /etc/profile
 ```
 ```vim
 PATH=$PATH:/usr/local/redis/bin
+PATH=$PATH:/usr/local/redis/conf
+
 ```
 激活环境变量
-```
+```bash
 source /etc/profile
+```
+启动redis服务
+```bash
+redis-server redis.conf
 ```
 
 **ai-frameword(项目根目录) 目录下**
@@ -68,7 +74,7 @@ docker build -t forp/ai-framework:base . --no-cache
 ```
 ## 运行容器
 ```bash
-docker run --gpus all -itd --restart=unless-stopped --name="ai-framework" -e PROFILES_ACTIVE="test" forp/ai-framework:base
+docker run --gpus all -itd --restart=unless-stopped --name="ai-framework" -e PROFILES_ACTIVE="test" -p 8000:8000 forp/ai-framework:base 
 ## 若不使用gpu则去掉--gpus all 参数
 ```
 默认部署环境为**开发环境**

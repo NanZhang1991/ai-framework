@@ -14,4 +14,4 @@ def test():
 app.debug = True
 with app.app_context():
     # appName 根据自己实际的路由注册
-    app.register_blueprint(view.appName) #
+    app.register_blueprint(view.app_name) #

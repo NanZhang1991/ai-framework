@@ -3,7 +3,7 @@ from logging import handlers
 from concurrent_log_handler import ConcurrentRotatingFileHandler
 import os
 import sys
-
+# from ..common.config import LOG_DIR
 def logger(filename, module_name):
     logging.basicConfig()
     logger = logging.getLogger(module_name)
@@ -26,10 +26,9 @@ def logger(filename, module_name):
 
 
 if __name__ == "__main__":
-    log_dir = os.path.join(os.getcwd(), 'doc_review/data/log_output')
+    log_dir = os.path.join(os.getcwd(), 'app/data/log_output')
     fn = 'log.log'
     logger = logger(os.path.join(log_dir, fn), __name__)
-    
     logger.debug('Quick zephyrs blow, vexing daft Jim.')
     logger.info('How quickly daft jumping zebras vex.')
     logger.error('unknow')

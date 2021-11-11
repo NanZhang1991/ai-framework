@@ -30,10 +30,7 @@ RUN set -ex &&\
         sed -i '88s/protected-mode yes/protected-mode no/' /usr/local/redis/conf/redis.conf
 
 ENV PATH=$PATH/usr/local/redis/bin
-
-# 克隆代码
-RUN yum install git -y && \
-        git clone https://github.com/NanZhang1991/ai-framework.git
+ENV PATH=$PATH/usr/local/redis/conf
 
 RUN set -ex \
         && curl -fSL "https://npm.taobao.org/mirrors/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
@@ -50,6 +47,10 @@ RUN set -ex \
         && pip3 config set install.trusted-host pypi.douban.com \
         && pip3 config set global.ssl_verify false \
         && pip3 install --upgrade pip
+
+# 克隆代码
+RUN yum install git -y && \
+        git clone https://github.com/NanZhang1991/ai-framework.git
 
 WORKDIR /home/ai-framework
 RUN pip3 install -r requirements.txt

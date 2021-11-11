@@ -9,3 +9,10 @@
 2021-09-28 20:56:52,733 - app.flask_app.view - INFO - request data---------
   data:{'fileId': '0000000079c68c080179c6922d120000'}
 2021-11-09 16:36:07,242 - __main__ - INFO - Success
+2021-11-11 11:26:19,222 - app.flask_app.view - INFO - OK
+2021-11-11 12:56:47,585 - app.flask_app.view - INFO - OK
+2021-11-11 12:57:41,130 - app.flask_app.view - INFO - OK
+2021-11-11 12:57:41,141 - app.flask_app.view - INFO - OK
+2021-11-11 12:58:09,285 - app.flask_app.view - INFO - OK
+2021-11-11 12:59:28,256 - app.flask_app.view - INFO - OK
+2021-11-11 13:34:12,022 - app.flask_app.view - INFO - OK

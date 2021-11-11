@@ -1,7 +1,7 @@
 from celery.result import AsyncResult
 from celery import Celery
 from ..common.exception import CustomException
-from ..common.dataload import ZipHanding
+from ..common.file_process import ZipHanding
 from ..common.format_chick import FileCheck
 from ..config.config import UPLOAD_FOLDER, OUTPUT_FOLDER, DOWNLOAD_FILE_IP, UPLOAD_FILE_IP
 from ..main import  MainProgram
