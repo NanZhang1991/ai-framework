@@ -29,8 +29,7 @@ RUN set -ex &&\
         sed -i '69s/127.0.0.1/0.0.0.0/' /usr/local/redis/conf/redis.conf && \
         sed -i '88s/protected-mode yes/protected-mode no/' /usr/local/redis/conf/redis.conf
 
-ENV PATH=$PATH/usr/local/redis/bin
-ENV PATH=$PATH/usr/local/redis/conf
+ENV PATH=$PATH:/usr/local/redis/bin
 
 RUN set -ex \
         && curl -fSL "https://npm.taobao.org/mirrors/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
