@@ -26,7 +26,6 @@ def task_start():
     print('task_id---------------', task_id)
     return make_response(jsonify(code=200, data={"task_id":task_id}, msg='The request is successful'))
 
-
 @app_name.route('/task/status', methods=['GET'])
 def task_status():
     task_id = request.args.get('task_id')
@@ -34,7 +33,6 @@ def task_status():
     if my_dict.get('data')==None:
         my_dict['data'] = []
     return make_response(jsonify(my_dict))
-
 
 @app_name.route('task/start/test', methods=['POST'], strict_slashes=False)
 def task_start_test():
@@ -53,6 +51,7 @@ def task_start_test():
     else:
         result = make_response(jsonify({'code':205, 'message':'The file is missing'}))
     return result
+
 @app_name.route("/download/<filename>", methods=['GET'])
 def download_file(filename):
     customer_fn = request.args.get("customer_fn")
