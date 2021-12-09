@@ -1,7 +1,5 @@
 {
-    "UPLOAD_FOLDER": "app/data/input",
+    "INPUT_FOLDER": "app/data/input",
     "OUTPUT_FOLDER": "app/data/output",
-    "LOG_DIR":"app/data/log_output",
-    "DOWNLOAD_FILE_IP": "http://192.168.100.33:8087/fileSystem/getFileUrl",
-    "UPLOAD_FILE_IP": "http://192.168.100.33:8087/fileSystem/uploadFile"
+    "LOG_DIR":"app/data/log_output"
 }

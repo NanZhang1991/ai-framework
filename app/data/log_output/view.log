@@ -16,3 +16,59 @@
 2021-11-11 12:58:09,285 - app.flask_app.view - INFO - OK
 2021-11-11 12:59:28,256 - app.flask_app.view - INFO - OK
 2021-11-11 13:34:12,022 - app.flask_app.view - INFO - OK
+2021-12-07 16:45:23,417 - __main__ - INFO - Success
+2021-12-07 16:47:23,159 - __main__ - INFO - Success
+2021-12-07 16:49:16,373 - __main__ - INFO - Success
+2021-12-07 16:49:24,554 - __main__ - INFO - Success
+2021-12-07 16:49:28,976 - __main__ - INFO - Success
+2021-12-07 16:49:36,609 - __main__ - INFO - Success
+2021-12-07 16:49:41,873 - __main__ - INFO - Success
+2021-12-07 16:49:55,085 - __main__ - INFO - Success
+2021-12-07 16:49:56,479 - __main__ - INFO - Success
+2021-12-07 16:49:57,794 - __main__ - INFO - Success
+2021-12-07 16:50:07,233 - __main__ - INFO - Success
+2021-12-07 16:50:08,641 - __main__ - INFO - Success
+2021-12-07 16:50:09,622 - __main__ - INFO - Success
+2021-12-07 16:50:10,841 - __main__ - INFO - Success
+2021-12-08 19:33:41,214 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:22:26,634 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:22:47,769 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:22:49,576 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:23:55,447 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:24:16,402 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:24:48,610 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:24:52,546 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:26:38,575 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:26:51,979 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:27:50,492 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:27:55,974 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:28:05,392 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:29:44,484 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:30:22,111 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:30:39,966 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:30:55,496 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:31:01,270 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:31:42,852 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:31:57,682 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 20:33:30,200 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:33:47,737 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:34:18,508 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:34:23,923 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:35:47,897 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:35:54,036 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:39:24,028 - app.flask_app.view - INFO - request data---------
+  data:{'taskId': '03998046-5dae-44e7-8a66-272633a7d104'}
+2021-12-08 20:41:38,596 - app.flask_app.view - INFO - request data---------
+  data:{'taskId': '03998046-5dae-44e7-8a66-272633a7d104', 'fileid': 'ABC.docx'}
+2021-12-08 20:42:02,725 - app.flask_app.view - INFO - request data---------
+  data:{'taskId': '03998046-5dae-44e7-8a66-272633a7d104', 'fileid': 'ABC.docx'}
+2021-12-08 20:46:19,370 - app.flask_app.view - INFO - ouptput_directory ----: /mnt/e/Forp/project/ai-framework/app/data/output/2021-12-08 20:31:57.xlsx
+2021-12-08 20:46:38,100 - app.flask_app.view - INFO - request data---------
+  data:{'taskId': '03998046-5dae-44e7-8a66-272633a7d104', 'fileid': 'ABC.docx'}
+2021-12-08 20:58:08,858 - app.flask_app.view - INFO - request data---------
+  data:{'taskId': '03998046-5dae-44e7-8a66-272633a7d104', 'fileid': 'ABC.docx'}
+2021-12-08 20:59:58,611 - app.flask_app.view - INFO - request data---------
+  data:{'taskId': '03998046-5dae-44e7-8a66-272633a7d104', 'fileid': 'ABC.docx'}
+2021-12-08 21:01:15,501 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 21:01:27,133 - app.flask_app.view - INFO - input file path -------:app/data/input/数据标注流程.docx
+2021-12-08 21:01:43,801 - app.flask_app.view - INFO - input file path -------:app/data/input/验证版招股说明书脚注生成模型发布说明书.docx
