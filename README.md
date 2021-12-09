@@ -2,7 +2,7 @@ Basic Project Structure
 # 项目环境
 ## 克隆整个项目
 ```bash
-git clone https://git.apexsoft.com.cn/forp/YFB/AI-GROUP/AI-MODEL/FRAMEWORK/ai-framework.git
+git clone https://github.com/NanZhang1991/ai-framework.git
 ```
 
 ## 运行环境
