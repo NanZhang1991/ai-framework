@@ -11,7 +11,8 @@ RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Cen
 
 ENV PYTHON_VERSION 3.7.9
 #  Dependencies required to install Python Otherwise, the pip3 package will not be installed
-RUN yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel gcc make
+RUN yum update -y
+RUN yum -y install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel libffi-devel gcc make lzma
 
 WORKDIR /home
 
@@ -26,11 +27,13 @@ RUN set -ex &&\
         make && make PREFIX=/usr/local/redis install && \
         mkdir -p /usr/local/redis/conf/ && \
         cp /home/redis/redis.conf  /usr/local/redis/conf/  && \
+        rm -rf /home/redis && \
         sed -i '69s/127.0.0.1/0.0.0.0/' /usr/local/redis/conf/redis.conf && \
         sed -i '88s/protected-mode yes/protected-mode no/' /usr/local/redis/conf/redis.conf
 
 ENV PATH=$PATH:/usr/local/redis/bin
 
+# insatll python
 RUN set -ex \
         && curl -fSL "https://npm.taobao.org/mirrors/python/${PYTHON_VERSION%%[a-z]*}/Python-$PYTHON_VERSION.tar.xz" -o python.tar.xz \
         && export GNUPGHOME="$(mktemp -d)" \
@@ -55,8 +58,15 @@ WORKDIR /home/ai-framework
 RUN pip3 install -r requirements.txt
 
 #celery
-#RUN set -ex \
-#        && ln -s /usr/local/python3/bin/celery /usr/bin/celery
+RUN set -ex \
+       && ln -s /usr/local/python3/bin/celery /usr/bin/celery
 
 RUN chmod 777 env/run.sh
+
+
 CMD env/run.sh
+
+# CMD redis-server /usr/local/redis/conf/redis.conf &\
+#     celery -A app.celery_app.task worker --loglevel=info &\
+#     python3 server.py
+

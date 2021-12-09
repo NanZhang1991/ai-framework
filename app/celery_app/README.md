@@ -280,7 +280,7 @@ send_task():可以发送未被注册的异步任务，即没有被celery.task装
 ```
 
 #### 1. app.send_task
-```shell
+```python
 # tasks.py
 from celery import Celery
 app = Celery('tasks', backend='redis://localhost', broker='pyamqp://')
@@ -293,7 +293,7 @@ app.send_task('tasks.add',args=[3,4])  # 参数基本和apply_async函数一样
 
 #### 2. Task.delay
 delay方法是apply_async方法的简化版，不支持执行选项，只能传递任务的参数。
-```shell
+```python
 @app.task
 def add(x, y, z=0):
     return x + y
@@ -303,10 +303,11 @@ add.delay(30,40,z=5) # 包括位置参数和关键字参数
 
 #### 3. Task.apply_async
 apply_async支持执行选项，它会覆盖全局的默认参数和定义该任务时指定的执行选项，本质上还是调用了send_task方法；
-```shell
+```python
 add.apply_async(args=[30,40], kwargs={'z':5})
 
 # 其他参数
+'''
 task_id:为任务分配唯一id，默认是uuid;
 countdown : 设置该任务等待一段时间再执行，单位为s；
 eta : 定义任务的开始时间；eta=time.time()+10;
@@ -328,7 +329,7 @@ compression：压缩方案，通常有zlib, bzip2
 headers：为任务添加额外的消息；
 link：任务成功执行后的回调方法；是一个signature对象；可以用作关联任务；
 link_error: 任务失败后的回调方法，是一个signature对象；
-
+'''
 # 如下
 add.apply_async((2, 2), retry=True, retry_policy={
     'max_retries': 3,
@@ -351,7 +352,7 @@ task.apply_async((2,2),
 
 由于celery发送的都是去其他进程执行的任务，如果需要在客户端监控任务的状态，有如下方法：
 
-```shell
+```python
 r = task.apply_async()
 r.ready()     # 查看任务状态，返回布尔值,  任务执行完成, 返回 True, 否则返回 False.
 r.wait()      # 会阻塞等待任务完成, 返回任务执行结果，很少使用；

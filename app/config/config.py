@@ -19,7 +19,7 @@ def convert_path(path):
 
 config_path = convert_path('app/config/config.json')
 config = load_json(config_path)
-UPLOAD_FOLDER = config.get('UPLOAD_FOLDER')
+INPUT_FOLDER = config.get('UPLOAD_FOLDER')
 OUTPUT_FOLDER = config.get('OUTPUT_FOLDER')
 LOG_DIR = config.get('LOG_DIR')
 

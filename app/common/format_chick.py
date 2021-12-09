@@ -1,3 +1,6 @@
+from logging import Formatter
+
+
 class FileCheck:
     """
     Document Type Checking
@@ -25,11 +28,12 @@ class FileCheck:
         >>>'docx'
         """
         if '.' in fn and fn.rsplit('.', 1)[1] in self.ALLOWED_EXTENSIONS:
-            return fn.rsplit('.', 1)[1]
+            return True
         else:
             return False
 
 if __name__=='__main__':
 
     docx_chick = FileCheck(['docx'])
-    docx_chick.allowed_file('abcd.docx')
+    result = docx_chick.allowed_file('abcd.docx')
+    print(result)
