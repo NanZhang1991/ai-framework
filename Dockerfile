@@ -5,6 +5,7 @@ FROM centos:centos7.9.2009
 
 USER root
 
+ENV TZ=Asia/Shanghai
 ENV LANG C.UTF-8
 
 RUN curl -o /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
@@ -52,10 +53,11 @@ RUN set -ex \
 
 # 克隆代码
 RUN yum install git -y && \
-        git clone https://github.com/NanZhang1991/ai-framework.git
+        git clone -b develop https://zhangnan:forp-zhangnan@git.apexsoft.com.cn/forp/YFB/AI-GROUP/AI-MODEL/FRAMEWORK/ai-framework.git
 
 WORKDIR /home/ai-framework
-RUN pip3 install -r requirements.txt
+RUN set -ex \
+    && pip3 install -r requirements.txt
 
 #celery
 RUN set -ex \

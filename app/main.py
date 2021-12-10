@@ -3,6 +3,8 @@ import pandas as pd
 import os
 import datetime
 from .config.config import OUTPUT_FOLDER
+import requests
+from .config.config import UPLOAD_FILE_IP
 
 class MainProgram:
     @staticmethod
@@ -23,7 +25,14 @@ class MainProgram:
         data = calculate(data)
         df = pd.DataFrame(data)
         excel_name = "".join([output_fn,".xlsx"])
-        df.to_excel(os.path.join(OUTPUT_FOLDER, excel_name))
+        output_fp = os.path.join(OUTPUT_FOLDER, excel_name)
+        df.to_excel(output_fp)
+        # params = {'userId': '0', "userName": 'app'}
+        # files = {'file': open(output_fp, 'rb')}
+        # response = requests.post(UPLOAD_FILE_IP, params=params, files=files).text
+        # res = json.loads(response)
+        # {"code":200,"data":{"fileBucketId":"000000007d453c70017d9fc3986c2722","fileName":"招股说明书三元组数据集_内部标注.zip"},"msg":"success"}
+        
         if data:
             result_dict['data'] = excel_name
             result_dict['message'] ='Program processing completed'

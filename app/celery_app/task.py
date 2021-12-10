@@ -2,7 +2,7 @@ from celery.result import AsyncResult
 from celery import Celery
 from ..common.exception import CustomException
 from ..common.format_chick import FileCheck
-from ..config.config import INPUT_FOLDER, OUTPUT_FOLDER, DOWNLOAD_FILE_IP, UPLOAD_FILE_IP
+from ..config.config import INPUT_FOLDER, DOWNLOAD_FILE_IP
 from ..main import  MainProgram
 import requests
 import json
@@ -10,8 +10,11 @@ import time
 import os
 from datetime import datetime
 from pathlib import Path
-
+from ..common.log import logger
+from ..config.config import LOG_DIR
 from ast import literal_eval
+
+logger = logger(os.path.join(LOG_DIR, 'task.log'), __name__)
 
 app = Celery('task',  broker='redis://localhost:6379/0', backend='redis://localhost:6379/1') 
 # celery.conf.update(app.config)
@@ -27,12 +30,14 @@ def get_start(data):
     params = {'fileId': file_id}
     file_url_text = requests.get(DOWNLOAD_FILE_IP, params=params).text
     file_url_dict = json.loads(file_url_text)
+    logger.info(f"file_url_dict---------\n  data:{file_url_dict}")
 
     if file_url_dict.get('data'):
         file_url = file_url_dict.get('data').get('fileUrl')
         content = requests.get(file_url).content
+
         if zip_chick.allowed_file(file_url):
-            fn = file_id + '.zip'
+            fn = "".join([file_id,'.zip'])
             input_fp = os.path.join(INPUT_FOLDER, fn)
             input_fp = Path(input_fp).as_posix()
             with open(input_fp, 'wb') as f:
@@ -44,7 +49,7 @@ def get_start(data):
             my_dict = {'code':201, 'msg':'File format error'}
 
     else:
-        my_dict = {'code':205, 'msg':'File not found'}
+        my_dict = {'code':file_url_dict.get('code'), 'msg':file_url_dict.get('msg')}
     return my_dict
 
 @app.task

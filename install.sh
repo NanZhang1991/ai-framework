@@ -1,6 +1,7 @@
 image_name="forp/ai-framework:base"
 contains_name="ai-framework" 
 port="8000:8000"
+PROFILES_ACTIVE="dev"
 
 #如果容器存在删除
 export contains_name
@@ -25,5 +26,6 @@ fi
 # docker build -t $image_name .
 docker build -t $image_name . --no-cache
 # 运行容器 
-docker run --gpus all -itd --restart=unless-stopped --name=$contains_name -e PROFILES_ACTIVE="dev" -p $port $image_name \
+docker run --gpus all -itd --restart=unless-stopped --name=$contains_name -e PROFILES_ACTIVE=$PROFILES_ACTIVE -p $port $image_name \
 && echo "Finish  $contains_name installation"
+## 若不使用gpu则去掉--gpus all 参数
