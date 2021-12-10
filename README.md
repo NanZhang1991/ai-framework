@@ -64,21 +64,19 @@ nohup python3 server.py >/dev/null 2>&1 &
 ```
 
 # Docker部署
-## 构建镜像
 ```bash
-docker build -t forp/ai-framework:base .
-# 若代码更新则不使用缓存
-docker build -t forp/ai-framework:base . --no-cache
+chmod +x install.sh
+./install.sh
 ```
-## 运行容器
-```bash
-docker run --gpus all -itd --restart=unless-stopped --name="ai-framework" -e PROFILES_ACTIVE="test" -p 8000:8000 forp/ai-framework:base 
-## 若不使用gpu则去掉--gpus all 参数
-```
+变量参数
+image_name="forp/ai-framework:base"
+contains_name="ai-framework" 
+port="8000:8000"
+PROFILES_ACTIVE="dev"
+
 默认部署环境为**开发环境**
 deploy_config文件夹下用于存放develop test product 环境的配置文件
 通过 修改参数-e PROFILES_ACTIVE 变量值 在运行env/run.sh 脚本时重新配置app/config/deploy.json文件
-
 
 # service
 ## Task_start
