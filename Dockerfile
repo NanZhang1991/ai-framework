@@ -53,7 +53,7 @@ RUN set -ex \
 
 # 克隆代码
 RUN yum install git -y && \
-        git clone -b develop https://zhangnan:forp-zhangnan@git.apexsoft.com.cn/forp/YFB/AI-GROUP/AI-MODEL/FRAMEWORK/ai-framework.git
+        git clone git clone https://github.com/NanZhang1991/ai-framework.git
 
 WORKDIR /home/ai-framework
 RUN set -ex \
