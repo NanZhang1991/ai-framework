@@ -20,6 +20,7 @@ def test():
 @app_name.route('/task/start', methods=['POST'], strict_slashes=False)
 def task_start():
     data = request.get_json(force=True)
+    #data = request.form.get('data')
     logger.info(f"request data---------\n  data:{data}")
     task = get_start.apply_async([data])
     task_id = task.task_id
