@@ -27,11 +27,6 @@ class MainProgram:
         excel_name = "".join([output_fn,".xlsx"])
         output_fp = os.path.join(OUTPUT_FOLDER, excel_name)
         df.to_excel(output_fp)
-        # params = {'userId': '0', "userName": 'app'}
-        # files = {'file': open(output_fp, 'rb')}
-        # response = requests.post(UPLOAD_FILE_IP, params=params, files=files).text
-        # res = json.loads(response)
-        # {"code":200,"data":{"fileBucketId":"000000007d453c70017d9fc3986c2722","fileName":"招股说明书三元组数据集_内部标注.zip"},"msg":"success"}
         
         if data:
             result_dict['data'] = excel_name
