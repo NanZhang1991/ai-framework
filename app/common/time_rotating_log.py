@@ -1,7 +1,8 @@
+import os 
 import logging
 from logging import handlers 
 
-def get_logger(fn='log/' + 'main.log', module_name="main", level=logging.INFO, when="midnight", interval=1, backupCount=31):
+def get_logger(fn='log/' + str(os.getpid()) + 'main.log', module_name="main", level=logging.INFO, when="midnight", interval=1, backupCount=31):
     logging.basicConfig()
     logger = logging.getLogger(module_name)
     logger.setLevel(logging.DEBUG)    
