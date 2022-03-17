@@ -4,6 +4,7 @@
 app/model_dirs/*
 app/data/input/*
 app/data/output/*
+*.pyc
 
 # Except this file !.gitkeep
 !.gitkeep
