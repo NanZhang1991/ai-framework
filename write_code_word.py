@@ -18,3 +18,4 @@ def getfilepath_write_word():
 
 if __name__ == '__main__':
    getfilepath_write_word()
+
