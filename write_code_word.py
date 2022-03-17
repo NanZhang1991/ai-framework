@@ -12,7 +12,7 @@ def getfilepath_write_word():
             if path.endswith('.py'):
                 with open(path,'r',encoding='utf-8') as f:
                     for line in f.readlines():
-                        print(line,file=file)
+                        print(line, file=file)
     print('代码写入成功')
 
 
