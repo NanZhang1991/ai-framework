@@ -13,9 +13,9 @@ def timer(file=__file__, logger=None):
             t2 =time.time()
             cost_time = t2-t1
             if logger:
-                logger.info(f" module:{file} \n function:{func.__name__}, time consuming:{cost_time}")
+                logger.info("module:{} \n function:{}, time consuming:{}s".format(file, func.__name__, cost_time))
             else:
-                print(f"module:{file} \n function:{func.__name__}, time consuming:{cost_time}秒")
+                print("module:{} \n function:{}, time consuming:{:.5f}s".format(file, func.__name__, cost_time))
             return result
         return insert_message
     return wrapper
@@ -23,6 +23,7 @@ def timer(file=__file__, logger=None):
 if __name__=="__main__":
     @timer()
     def test():
+        time.sleep(2)
         return 1
 
     print(test())
