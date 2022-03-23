@@ -6,9 +6,9 @@ def timer(file=__file__, logger=None):
     """time-consuming computation decorator"""
     def wrapper(func):
         def insert_message(*args, **kwargs):
-            t1= time.time()
+            t1 = time.time()
             result = func(*args, **kwargs)
-            t2 =time.time()
+            t2 = time.time()
             cost_time = t2-t1
             if logger:
                 logger.info("module:{} \n function:{}, time consuming:{}s".format(file, func.__name__, cost_time))
