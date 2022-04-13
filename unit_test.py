@@ -1,18 +1,34 @@
-import os
+import json
 import unittest
-from app.main import  MainProgram
-from app.common.log import logger
-from app.config.config import LOG_DIR
+import requests
+import socket
 
-logger = logger(os.path.join(LOG_DIR, 'unit_test.log'), __name__)
 
-class TestStringMethods(unittest.TestCase):
-    def test_string(self):
-        input_fp = {'a':2, "b":3}
-        app_result = MainProgram.function(input_fp)
-        my_dict = {'code':200, 'data':app_result.get('data'), 'msg':app_result.get('message')}
-        logger.info("Success")
-        assert isinstance(my_dict, dict)  
-            
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
+
+
+class NumbersTest(unittest.TestCase):
+
+    def test_even(self):
+        """
+        Test case
+        """
+        url = "".join(['http://', IPAddr, ':8080/v1/co'])
+        headers = {}
+        with open('data/input/test.json', 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        with open('data/output/test_result.json', 'r', encoding='utf-8') as f:
+            test_result = json.load(f)
+        for i, case in enumerate(data):
+            with self.subTest(i=i):
+                response = requests.post(url=url, headers=headers, json=case)
+                res = json.loads(response.text)
+                res.pop('costTime')
+                test_result[i].pop('costTime')
+                self.assertEqual.__self__.maxDiff = None
+                self.assertEqual(res, test_result[i])
+
+
 if __name__ == '__main__':
     unittest.main()
