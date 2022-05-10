@@ -16,11 +16,11 @@ LogParams = collections.namedtuple('LogParams',
                                    ['fn', 'module_name',
                                     'level', 'when', 'interval',
                                     'backup_count'])
-log_params = LogParams('log/' + str(os.getppid()) + 'main.log', "main",
-                       logging.INFO, "midnight", 1, 31)
+log_params_default = LogParams('log/' + str(os.getppid()) + 'main.log', "main",
+                               logging.INFO, "midnight", 1, 31)
 
 
-def get_logger(log_params=log_params):
+def get_logger(log_params=log_params_default):
     logging.basicConfig()
     log = logging.getLogger(log_params.module_name)
     log.setLevel(logging.DEBUG)
