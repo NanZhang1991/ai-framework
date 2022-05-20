@@ -75,7 +75,6 @@ def service_demo():
             response = make_response(result, 404)
         finally:
             logger.info(f"{'='*10} Complete {'='*10} \n")
-            return response
           
     headers = {'content-type': 'application/json'}
     response.headers = headers
