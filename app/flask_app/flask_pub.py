@@ -68,18 +68,16 @@ def service_demo():
             response = make_response(result, 200)
             headers = {'content-type': 'application/json'}
             response.headers = headers
+            return responese
         except Exception:
             logger.error(traceback.format_exc())
             result = jsonify({"status": 404, "message": traceback.format_exc(),
                               "costTime": time.time()-start_time, "data": None})
             response = make_response(result, 404)
+            return responese
         finally:
             logger.info(f"{'='*10} Complete {'='*10} \n")
           
-    headers = {'content-type': 'application/json'}
-    response.headers = headers
-    return responese
-
 
 if __name__ == '__main__':
     if platform.system() == 'Windows':
