@@ -48,8 +48,7 @@ def service_demo():
          try:
             data = request.get_json(force=True)
             headers = request.headers
-            tenant_id = headers.get('Tenantid')
-            app_id = headers.get('Appid')
+            headers = validation(headers)
             data = validation(data)
         except Exception as e:
             logger.error(traceback.format_exc())
