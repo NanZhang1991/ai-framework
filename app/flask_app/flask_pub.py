@@ -76,8 +76,8 @@ def _program(data):
         response = make_response(result, 404)
     finally:
         headers = {'content-type': 'application/json'}
-        response.headers = headers     
-        return responese
+        responese.headers = headers   
+        return response
           
 
 if __name__ == '__main__':
