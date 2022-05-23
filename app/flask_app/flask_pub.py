@@ -41,12 +41,14 @@ def main_1():
 @app.route('/v1/co/service_test',
            methods=['GET', 'POST'], strict_slashes=False)
 def service_demo():
+    global start_time
+    start_time = time.time()
     if request.method == 'GET':
         result = 'service_demo get port test was successful!'
         response = make_response(jsonify(result), 200)
     else:
         # data validation
-         try:
+        try:
             data = request.get_json(force=True)
             headers = request.headers
             headers = validation(headers)
@@ -54,9 +56,8 @@ def service_demo():
             response = _program(data)
         except Exception as e:
             logger.error(traceback.format_exc())
-            result = jsonify({"status": 400, "message": str(e),
-                              "costTime": time.time()-start_time, "data": None})
-            response = make_response(result, 400)
+            result = {"status": 400, "message": str(e),
+                      "costTime": time.time()-start_time, "data": None}
             response = make_response(jsonify(result), 400)
         finally:
             pass
@@ -65,7 +66,6 @@ def service_demo():
     logger.info(f"{'='*10} Complete {'='*10} \n")
     return response
             
-        
         
 # main program
 def _program(data):
