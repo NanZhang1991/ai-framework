@@ -57,25 +57,26 @@ def service_demo():
             response = make_response(result, 400)
             return response
         finally:
-            pass
-      # main program
+            logger.info(f"{'='*10} Complete {'='*10} \n")
+        
+        
+    # main program
+    def _program(data):
         try:
             res_dict = function(data)
             result = jsonify({"status": 200, "message": res_dict.get('message'),
                               "costTime": time.time()-start_time,
                               "data": res_dict.get('res')})
             response = make_response(result, 200)
-            headers = {'content-type': 'application/json'}
-            response.headers = headers
-            return responese
         except Exception:
             logger.error(traceback.format_exc())
             result = jsonify({"status": 404, "message": traceback.format_exc(),
                               "costTime": time.time()-start_time, "data": None})
             response = make_response(result, 404)
-            return responese
         finally:
-            logger.info(f"{'='*10} Complete {'='*10} \n")
+            headers = {'content-type': 'application/json'}
+            response.headers = headers     
+            return responese
           
 
 if __name__ == '__main__':
