@@ -50,6 +50,7 @@ def service_demo():
             headers = request.headers
             headers = validation(headers)
             data = validation(data)
+            return _program(data)
         except Exception as e:
             logger.error(traceback.format_exc())
             result = jsonify({"status": 400, "message": str(e),
@@ -60,23 +61,23 @@ def service_demo():
             logger.info(f"{'='*10} Complete {'='*10} \n")
         
         
-    # main program
-    def _program(data):
-        try:
-            res_dict = function(data)
-            result = jsonify({"status": 200, "message": res_dict.get('message'),
-                              "costTime": time.time()-start_time,
-                              "data": res_dict.get('res')})
-            response = make_response(result, 200)
-        except Exception:
-            logger.error(traceback.format_exc())
-            result = jsonify({"status": 404, "message": traceback.format_exc(),
-                              "costTime": time.time()-start_time, "data": None})
-            response = make_response(result, 404)
-        finally:
-            headers = {'content-type': 'application/json'}
-            response.headers = headers     
-            return responese
+# main program
+def _program(data):
+    try:
+        res_dict = function(data)
+        result = jsonify({"status": 200, "message": res_dict.get('message'),
+                          "costTime": time.time()-start_time,
+                          "data": res_dict.get('res')})
+        response = make_response(result, 200)
+    except Exception:
+        logger.error(traceback.format_exc())
+        result = jsonify({"status": 404, "message": traceback.format_exc(),
+                          "costTime": time.time()-start_time, "data": None})
+        response = make_response(result, 404)
+    finally:
+        headers = {'content-type': 'application/json'}
+        response.headers = headers     
+        return responese
           
 
 if __name__ == '__main__':
