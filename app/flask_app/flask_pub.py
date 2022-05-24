@@ -8,6 +8,7 @@ from common.log import logger
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
 CORS(app, resources=r'/*')
+start_time = time.time()
 
 
 @app.route('/v1/co', methods=['POST'], strict_slashes=False)
@@ -82,7 +83,8 @@ def _program(data):
                   "data": None}
         response = make_response(jsonify(result), 404)
     finally:
-        return response
+        pass
+    return response
           
 
 if __name__ == '__main__':
