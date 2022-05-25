@@ -1,9 +1,11 @@
 import platform
+import traceback
+import time
 from flask import Flask, request, jsonify, make_response, url_for, redirect
 from flask_cors import CORS
 import json
-from common.validation import validation
-from common.log import logger
+from app.common.validation import validation
+from app.common.log import logger
 
 app = Flask(__name__)
 app.config["JSON_AS_ASCII"] = False
@@ -71,7 +73,7 @@ def service_demo():
 # main program
 def _program(data):
     try:
-        res_dict = summary(data)
+        res_dict = program(data)
         result = {"status": 200, "message": res_dict.get('message'),
                   "costTime": '{0:.4f}s'.format(time.time()-start_time),
                   "data": res_dict.get('res')}
