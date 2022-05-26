@@ -4,7 +4,7 @@ import time
 from flask import Flask, request, jsonify, make_response, url_for, redirect
 from flask_cors import CORS
 import json
-from app.common.validation import validation
+from app.common.validation import val_headers, val_data
 from app.common.log import logger
 
 app = Flask(__name__)
@@ -44,39 +44,51 @@ def main_1():
 @app.route('/v1/co/service_test',
            methods=['GET', 'POST'], strict_slashes=False)
 def service_demo():
+    logger.info(f"{'='*10} Start {'='*10}")
     global start_time
     start_time = time.time()
     if request.method == 'GET':
         result = 'service_demo get port test was successful!'
         response = make_response(jsonify(result), 200)
     else:
-        # data validation
-        try:
-            data = request.get_json(force=True)
-            headers = request.headers
-            headers = validation(headers)
-            data = validation(data)
-            response = _program(data)
-        except Exception as e:
-            logger.error(traceback.format_exc())
-            result = {"status": 400, "message": str(e),
-                      "costTime": time.time()-start_time, "data": None}
-            response = make_response(jsonify(result), 400)
-        finally:
-            pass
-    headers = {'content-type': 'application/json'}
-    response.headers = headers
-    logger.info(f"{'='*10} Complete {'='*10} \n")
+        val_res = _data_validation()
+        response = _program(val_res[1]) if val_res[0] else val_res[1]
+        logger.info(f"{'='*10} Complete {'='*10} \n")
     return response
-            
-        
+
+
+def _data_validation():
+    """Data validation"""
+    try:
+        data = request.get_json(force=True)
+        headers = request.headers
+        headers = val_headers(headers)
+        data = val_data(data)
+        logger.info(f"tenant_id:{headers.get('tenant_id')}, " +
+                    f"app_id:{headers.get('app_id')}, " +
+                    f"article_item_id:{data.get('article_item_id')}")
+        return True, data
+    except Exception as e:
+        logger.error(traceback.format_exc())
+        result = {"status": 400, "message": str(e),
+                  "costTime": '{0:.4f}s'.format(time.time()-start_time),
+                  "data": None}
+        response = make_response(jsonify(result), 400)
+        headers = {'content-type': 'application/json'}
+        response.headers = headers
+        return False, response
+    finally:
+        pass
+    
+
 # main program
 def _program(data):
     try:
-        res_dict = program(data)
+        res_dict = summary(data)
         result = {"status": 200, "message": res_dict.get('message'),
                   "costTime": '{0:.4f}s'.format(time.time()-start_time),
-                  "data": res_dict.get('res')}
+                  "data": res_dict.get('summary'),
+                  "method": res_dict.get('method')}
         response = make_response(jsonify(result), 200)
     except Exception:
         logger.error(traceback.format_exc())
@@ -85,8 +97,9 @@ def _program(data):
                   "data": None}
         response = make_response(jsonify(result), 404)
     finally:
-        pass
-    return response
+        headers = {'content-type': 'application/json'}
+        response.headers = headers
+    return respons
           
 
 if __name__ == '__main__':
