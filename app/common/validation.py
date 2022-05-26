@@ -154,10 +154,10 @@ if __name__ == '__main__':
                  'language': 'en-US', 'tokenSize': None, 'textCleanFlag': 'N'}
 
     try:
-        headers = val_headers(test_headers)
-        logger.info(f"headers: {headers}")
-        article_dict = val_data(test_data)
-        logger.info(f"article_dcit: {article_dict}")
+        headers_dict = val_headers(test_headers)
+        logger.info(f"res_headers: {headers_dict}")
+        data_dict = val_data(test_data)
+        logger.info(f"article_dcit: {data_dict}")
     except Exception as e:
         logger.error(str(e) + traceback.format_exc())
     finally:
