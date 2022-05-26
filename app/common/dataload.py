@@ -1,6 +1,10 @@
 import json
 import os
+import stat
 from pathlib import Path
+
+flags = os.O_RDWR | os.O_CREAT
+mode = stat.S_IRUSR | stat.S_IWUSR
 
 def load_json(json_path):
     with open(json_path, 'r', encoding='utf-8') as f:
@@ -16,7 +20,7 @@ def load_json(fp):
 
 @staticmethod
 def to_json(dic, fp):
-    with open(fp, 'w') as f:
+    with os.fdopen(os.open(file_path, flags, mode), 'w') as f:
         json.dump(dic, f, indent=2)  
 
 
