@@ -44,6 +44,13 @@ def main_1():
 @app.route('/v1/co/service_test',
            methods=['GET', 'POST'], strict_slashes=False)
 def service_demo():
+    '''
+    Description: service main function
+    Returns
+    ----------
+    response: flask response, response that contains
+        the results of the program running
+    '''
     logger.info(f"{'='*10} Start {'='*10}")
     global start_time
     start_time = time.time()
@@ -58,7 +65,14 @@ def service_demo():
 
 
 def _data_validation():
-    """Data validation"""
+    Description: Input Data Validation
+    Returns
+    ----------
+    val_bool: Bool, input data Validation is pass ornot
+    val_res: Object or flask response, if val_bool is True retunrn
+        input Data after format, else return flask response thant
+        code status is 400
+    '''
     try:
         data = request.get_json(force=True)
         headers = request.headers
@@ -67,7 +81,8 @@ def _data_validation():
         logger.info(f"tenant_id:{headers.get('tenant_id')}, " +
                     f"app_id:{headers.get('app_id')}, " +
                     f"article_item_id:{data.get('article_item_id')}")
-        return True, data
+        val_bool = True
+        val_res = data
     except Exception as e:
         logger.error(traceback.format_exc())
         result = {"status": 400, "message": str(e),
@@ -76,13 +91,22 @@ def _data_validation():
         response = make_response(jsonify(result), 400)
         headers = {'content-type': 'application/json'}
         response.headers = headers
-        return False, response
+        val_bool = False
+        val_res = response
     finally:
         pass
-    
+    return val_bool, val_res
 
-# main program
 def _program(data):
+    '''
+    Description: The main program
+    Parameters
+    ----------
+    data: object, the program input data
+    Returns
+    ----------
+    response: flask response
+    '''
     try:
         res_dict = summary(data)
         result = {"status": 200, "message": res_dict.get('message'),
