@@ -14,7 +14,6 @@ import socket
 import unittest
 import requests
 import pandas as pd
-from aipaas.soa.client import SoaToken
 
 
 ENV = 'local'
@@ -28,21 +27,13 @@ class RequestConfig:
 
     def _headers(self):
         env_type = 'prod' if ENV == 'prod' else 'dev'
-        # 本地环境也使用用开发环境的鉴权配置
-        tenant_id = self.app_config.get(env_type).get('tenant_id')
-        app_id = self.app_config.get(env_type).get('app_id')
-        app_token = self.app_config.get(env_type).get('app_token')
-        soa = SoaToken(env_type='PROD' if env_type == 'prod' else 'beta')
-        authorization = soa.get_token(app_id, app_token)
         headers = {"tenantID": tenant_id,
-                   "appID": app_id,
-                   "Authorization": authorization}
+                   "appID": app_id}
         return headers
 
     def _gpu(self):
         headers = self._headers()
         url = self.app_config.get(ENV).get('gpu_url')
-        # AiLlab带请求头的gpu
         if ENV == "dev":
             x_apig_appcode = self.app_config.get(ENV).get('X-Apig-Appcode')
             headers_x_apig_appcode = {"X-Apig-Appcode": x_apig_appcode}
@@ -82,9 +73,6 @@ class RequestConfig:
         print(f"Authorization: {headers.get('Authorization')}")
         response = requests.post(url=url, headers=headers, json=case)
         res_dict = response.json()
-        # 生产的gpu 环境需要去掉结的一层 {"success": true, "msg": "", "result": {...}}
-        res_dict = res_dict.get('result') \
-            if GPU and (ENV == "prod")else res_dict
         return res_dict
 
 
