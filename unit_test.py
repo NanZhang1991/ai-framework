@@ -70,7 +70,6 @@ class RequestConfig:
 
     def request_res(self, case):
         url, headers = self._url_headers()
-        print(f"Authorization: {headers.get('Authorization')}")
         response = requests.post(url=url, headers=headers, json=case)
         res_dict = response.json()
         return res_dict
