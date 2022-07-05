@@ -117,10 +117,10 @@ def _program(data):
         response = make_response(jsonify(result), 200)
     except Exception:
         logger.error(traceback.format_exc())
-        result = {"status": 404, "message": traceback.format_exc(),
+        result = {"status": 500, "message": traceback.format_exc(),
                   "costTime": '{0:.4f}s'.format(time.time()-start_time),
                   "data": None}
-        response = make_response(jsonify(result), 404)
+        response = make_response(jsonify(result), 500)
     finally:
         headers = {'content-type': 'application/json'}
         response.headers = headers
