@@ -1,13 +1,6 @@
 #!/usr/bin/env python3
 # -*- encoding: utf-8 -*-
-'''
-@File: unit_test.py
-@Time: 2022/04/20 23:27:44
-@Version: 1.0
-@License: (C)Copyright Huawei Technologies Co., Ltd. 2022. All rights reserved.
-@Desc: 单元测试
-@Modify: 2022/04/20
-'''
+
 import json
 import copy
 import socket
