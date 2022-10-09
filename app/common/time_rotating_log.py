@@ -4,7 +4,7 @@
 @File: log.py
 @Time: 2022/04/18 19:55:24
 @Version: 1.0
-@License: (C)Copyright Huawei Technologies Co., Ltd. 2022. All rights reserved.
+@License:
 @Desc: 时间回滚日志
 '''
 import os
