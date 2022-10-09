@@ -27,8 +27,8 @@ def table_exists(table_name):
 
 def find_add_data(table_name, seg_table_name):
     DB_USER = "root"
-    DB_PASS = 1234"
-    DB_HOST =  "127.0.0.1"
+    DB_PASS = "1234"
+    DB_HOST = "127.0.0.1"
     DB_PORT = "3306"
     DATABASE = "yt_apple_bigdata"
     connect_info = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
@@ -45,7 +45,7 @@ def find_add_data(table_name, seg_table_name):
 def get_data_from_sql(sql_cmd):
     DB_USER = "root"
     DB_PASS = "1234"
-    DB_HOST =  "127.0.0.1"
+    DB_HOST = "127.0.0.1"
     DB_PORT = "3306"
     DATABASE = "yt_apple_bigdata"
     connect_info = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
@@ -57,7 +57,7 @@ def get_data_from_sql(sql_cmd):
 def del_error_data(table_name, error_id_tup):
     DB_USER = "root"
     DB_PASS = "1234"
-    DB_HOST =  "127.0.0.1"
+    DB_HOST = "127.0.0.1"
     DB_PORT = "3306"
     DATABASE = "spider_data"
     connect_info = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
@@ -69,7 +69,7 @@ def del_error_data(table_name, error_id_tup):
 def to_database(df, table_name): 
     DB_USER = "root"
     DB_PASS = "1234"
-    DB_HOST =  "127.0.0.1"
+    DB_HOST = "127.0.0.1"
     DB_PORT = "3306"
     DATABASE = "yt_apple_bigdata"
     connect_info = "mysql+pymysql://{}:{}@{}:{}/{}?charset=utf8".format(DB_USER, DB_PASS, DB_HOST, DB_PORT, DATABASE)
