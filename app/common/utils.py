@@ -31,6 +31,31 @@ def time_master(func):
     return call_func
 
 
+class TimeoutException(Exception):
+    pass
+
+def timeout_handler(signum, frame):
+    raise TimeoutException("Function execution timed out")
+
+
+def timeout_monitor(time_limit):
+    """Timeout detection decorator"""
+    def wrapper(func):
+        def call_func(*args, **kwargs):
+            signal.signal(signal.SIGALRM, timeout_handler)
+            signal.alarm(time_limit)
+            try:
+                res = func(*args, **kwargs)
+                # 如果函数在time_limit内完成，取消定时器
+                signal.alarm(0)
+                return res 
+            except TimeoutException as e:
+                raise e
+            finally:
+                pass
+        return call_func
+    return wrapper
+
 if __name__=="__main__":
     @timer()
     def test():
