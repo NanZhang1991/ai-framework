@@ -2,7 +2,7 @@
 import time
 from functools import wraps
 
-def timer(module='s',logger=None):
+def timer(module='s', logger=None):
     """time-consuming computation decorator"""
     def wrapper(func):
         def insert_message(*args, **kwargs):
@@ -10,10 +10,11 @@ def timer(module='s',logger=None):
             result = func(*args, **kwargs)
             cost_time = time.perf_counter() - start_time
             if logger:
-                logger.info("module:%s \n function:%s, time consuming:%ss",
-                            file, func.__name__, cost_time)
+                logger.info("module:%s \n function:%s, time consuming:%ss\n",
+                            module, func.__name__, cost_time)
             else:
-                print(f"module:{module} \n function:{func.__name__},time consuming:{cost_time:.5f}s")
+                print(f"module:{module} \n function:{func.__name__}," +
+                      f"time consuming:{cost_time:.5f}s\n")
             return result
         return insert_message
     return wrapper
